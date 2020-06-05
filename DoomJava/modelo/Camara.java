@@ -5,18 +5,54 @@ import java.awt.event.KeyListener;
 
 
 public class Camara implements KeyListener{
-	public double xPos, yPos, xDir, yDir, xPlane, yPlane;
-	public boolean left, right, forward, back;
-	public final double MOVE_SPEED = .08;
-	public final double ROTATION_SPEED = .045;
+	public double xPos, 
+                      yPos, 
+                      xDir, 
+                      yDir, 
+                      xPlane, 
+                      yPlane;
+        
+	public boolean left, 
+                       right, 
+                       forward, 
+                       back;
+        
+	public final double MOVE_SPEED = 0.08;
+	public final double ROTATION_SPEED = 0.045;
+        
 	public Camara(double x, double y, double xd, double yd, double xp, double yp) {
-		xPos = x;
-		yPos = y;
-		xDir = xd;
-		yDir = yd;
-		xPlane = xp;
-		yPlane = yp;
+		this.setPosX(x);
+		this.setPosY(y);
+		this.setDirX(xd);
+		this.setDirY(yd);
+		this.setPlanoX(xp);
+		this.setPlanoY(yp);
 	}
+        
+        void setPosX(double POSX) {
+            this.xPos=POSX;
+        }
+        
+        void setPosY(double POSY) {
+            this.yPos=POSY;
+        }
+        
+        void setDirX(double DIRX) {
+            this.xDir=DIRX;
+        }
+        
+        void setDirY(double DIRY) {
+            this.yDir=DIRY;
+        }
+        
+        void setPlanoX(double PLANOX) {
+            this.xPlane=PLANOX;
+        }
+        
+        void setPlanoY(double PLANOY) {
+            this.yPlane=PLANOY;
+        }
+        
 	public void keyPressed(KeyEvent key) {
 		if((key.getKeyCode() == KeyEvent.VK_LEFT))
 			left = true;
