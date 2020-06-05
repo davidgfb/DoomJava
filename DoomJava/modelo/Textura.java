@@ -2,6 +2,8 @@ package modelo;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 public class Textura {
@@ -46,12 +48,16 @@ public class Textura {
     
     private void carga() {
         try {
-            BufferedImage imagen = ImageIO.read(getClass().getResource(ruta));
-            int ancho = imagen.getWidth(),
-                alto = imagen.getHeight();
-            imagen.getRGB(0, 0, ancho, alto, pixeles, 0, ancho);
-        } catch (IOException error) {
-            error.printStackTrace();
+            BufferedImage imagen= ImageIO.read(getClass().getResource(ruta));
+            int x0=0,
+                y0=0,
+                ancho = imagen.getWidth(),
+                alto = imagen.getHeight(),
+                desplaz=0;
+            
+            imagen.getRGB(x0, y0, ancho, alto, pixeles, desplaz, ancho);
+        } catch (IOException ex) {
+            Logger.getLogger(Textura.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
