@@ -5,26 +5,32 @@ import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.awt.image.ImageObserver;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 
 public class Juego extends JFrame implements Runnable{
 	
-    private static final long serialVersionUID = 1L;
-    public int mapWidth = 15,
-               mapHeight = 15,
+    public int anchoMapa = 15,
+               altoMapa = 15,
             
-               ancho=640,
-               alto=480;
+               anchoVen=640,
+               altoVen=480;
     
-    private Thread hilo=new Thread(this);
-    private boolean abierto;
-    private BufferedImage imagen= new BufferedImage(ancho, alto, BufferedImage.TYPE_INT_RGB);;
+    private final Thread hilo=new Thread(this);
+    private boolean abierto=true;
+    private final BufferedImage imagen= new BufferedImage(anchoVen, altoVen, BufferedImage.TYPE_INT_RGB);
     public int[] pixeles = ((DataBufferInt)imagen.getRaster().getDataBuffer()).getData();
-    public ArrayList<Textura> texturas = new ArrayList<Textura>();
-    public Camara camera= new Camara(4.5, 4.5, 1, 0, 0, -0.66);
-    public Pantalla screen = new Pantalla(map, mapWidth, mapHeight, texturas, ancho, alto);;
-    public static int[][] map = {{1,1,1,1,1,1,1,1,2,2,2,2,2,2,2},
+    public ArrayList<Textura> texturas = new ArrayList<>();
+    double posX=4.5, 
+           posY=4.5, 
+           dirX=1, 
+           dirY=0, 
+           planoX=0, 
+           planoY=-0.66;
+    public Camara camera= new Camara(posX, posY, dirX, dirY, planoX, planoY);
+    public Pantalla screen = new Pantalla(mapa, anchoMapa, altoMapa, texturas, anchoVen, altoVen);
+    public static int[][] mapa = {{1,1,1,1,1,1,1,1,2,2,2,2,2,2,2},
                                  {1,0,0,0,0,0,0,0,2,0,0,0,0,0,2},
                                  {1,0,3,3,3,3,3,0,0,0,0,0,0,0,2},
                                  {1,0,3,0,0,0,3,0,2,0,0,0,0,0,2},
@@ -49,9 +55,8 @@ public class Juego extends JFrame implements Runnable{
         this.texturas.add(Textura.stone);
         //************************  FIN AÑADE TEXTURAS  *******************
 
-        
         this.addKeyListener(camera);
-        this.setSize(ancho, alto);
+        this.setSize(anchoVen, altoVen);
         this.setResizable(false);
         this.setTitle("3D Engine");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -68,10 +73,12 @@ public class Juego extends JFrame implements Runnable{
         
         try {
             this.hilo.join();
-        } catch(InterruptedException error) {
+        } 
+        catch(InterruptedException error) {
             error.printStackTrace();
         }
     }
+    
     void setAbierto(boolean ABIERTO) {
         this.abierto=ABIERTO;
     }
@@ -82,32 +89,37 @@ public class Juego extends JFrame implements Runnable{
         if(estraBuffer == null) {
             this.createBufferStrategy(3);
             estraBuffer = this.getBufferStrategy();
-            
         }
         
-        Graphics graficos = estraBuffer.getDrawGraphics();
-        graficos.drawImage(imagen, 0, 0, imagen.getWidth(), imagen.getHeight(), null);
+        Graphics graficos = estraBuffer.getDrawGraphics(); //estos van en esta posicion posible excepcion puntero nulo
+        int x=0,
+            y=0;
+        ImageObserver observaImagen=null;
+        
+        graficos.drawImage(imagen, x, y, imagen.getWidth(), imagen.getHeight(), observaImagen); 
+        
         estraBuffer.show();
     }
     
+    
+    
     @Override
     public void run() {
-        long lastTime = System.nanoTime();
+        long ultimoTiempo = System.nanoTime();
         final double ns = 1000000000.0 / 60.0; //60 times per second
         double delta = 0;
         
         this.requestFocus();
         
         while(abierto) {
-            long now = System.nanoTime();
-            delta += (now-lastTime) / ns;
-            lastTime = now;
+            long ahora = System.nanoTime();
+            delta += (ahora-ultimoTiempo) / ns;
+            ultimoTiempo = ahora;
             
             while (delta >= 1) //Make sure update is only happening 60 times a second
             {
-                //handles all of the logic restricted time
-                this.screen.update(camera, pixeles);
-                this.camera.update(map);
+                this.screen.update(camera, pixeles); //handles all of the logic restricted time
+                this.camera.update(mapa);
                 delta--;
             }
             this.renderiza();//displays to the screen unrestricted time
