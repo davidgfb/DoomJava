@@ -9,13 +9,37 @@ public class Pantalla {
 	public ArrayList<Textura> textures;
 	
 	public Pantalla(int[][] m, int mapW, int mapH, ArrayList<Textura> tex, int w, int h) {
-		map = m;
-		mapWidth = mapW;
-		mapHeight = mapH;
-		textures = tex;
-		width = w;
-		height = h;
+                this.setMapa(m);
+                this.setAnchoMapa(mapW);
+                this.setAltoMapa(mapH);
+                this.setTexturas(tex);
+                this.setAncho(w);
+                this.setAlto(h);
 	}
+        
+        void setMapa(int[][] MAPA) {
+            this.map=MAPA;
+        }
+        
+        void setAnchoMapa(int ANCHOMAPA) {
+            this.mapWidth=ANCHOMAPA;
+        }
+        
+        void setAltoMapa(int ALTOMAPA) {
+            this.mapHeight=ALTOMAPA;
+        }
+        
+        void setTexturas(ArrayList<Textura> TEXTURAS) {
+            this.textures=TEXTURAS;
+        }
+        
+        void setAncho(int ANCHO) {
+            this.width=ANCHO;
+        }
+        
+        void setAlto(int ALTO) {
+            this.height=ALTO;
+        }
 	
 	public int[] update(Camara camera, int[] pixels) {
 		for(int n=0; n<pixels.length/2; n++) {

@@ -53,6 +53,7 @@ public class Camara implements KeyListener{
             this.yPlane=PLANOY;
         }
         
+        @Override
 	public void keyPressed(KeyEvent key) {
 		if((key.getKeyCode() == KeyEvent.VK_LEFT))
 			left = true;
@@ -63,6 +64,7 @@ public class Camara implements KeyListener{
 		if((key.getKeyCode() == KeyEvent.VK_DOWN))
 			back = true;
 	}
+        @Override
 	public void keyReleased(KeyEvent key) {
 		if((key.getKeyCode() == KeyEvent.VK_LEFT))
 			left = false;
