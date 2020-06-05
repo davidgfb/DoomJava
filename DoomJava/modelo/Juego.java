@@ -106,7 +106,7 @@ public class Juego extends JFrame implements Runnable{
     @Override
     public void run() {
         long ultimoTiempo = System.nanoTime();
-        final double ns = 1000000000.0 / 60.0; //60 times per second
+        final double ns = 1000000000.0 / 60.0; //60 veces por segundo fps
         double delta = 0;
         
         this.requestFocus();
@@ -118,11 +118,11 @@ public class Juego extends JFrame implements Runnable{
             
             while (delta >= 1) //Make sure actualiza is only happening 60 times a second
             {
-                this.screen.update(camara, pixeles); //handles all of the logic restricted time
+                this.screen.actualiza(camara, pixeles); //handles all of the logic restricted time
                 this.camara.actualiza(mapa);
                 delta--;
             }
-            this.renderiza();//displays to the screen unrestricted time
+            this.renderiza(); //displays to the screen unrestricted time
         }
     }
     

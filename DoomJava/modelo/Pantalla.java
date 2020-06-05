@@ -4,151 +4,162 @@ import java.util.ArrayList;
 import java.awt.Color;
 
 public class Pantalla {
-    public int[][] map;
-    public int mapWidth, 
-               mapHeight, 
-               width, 
-               height;
+    public int[][] mapa;
+    public int anchoMapa, 
+               altoMapa, 
+               ancho, 
+               alto;
 
-    public ArrayList<Textura> textures;
+    public ArrayList<Textura> texturas;
 
-    public Pantalla(int[][] m, int mapW, int mapH, ArrayList<Textura> tex, int w, int h) {
-        this.setMapa(m);
-        this.setAnchoMapa(mapW);
-        this.setAltoMapa(mapH);
-        this.setTexturas(tex);
-        this.setAncho(w);
-        this.setAlto(h);
+    public Pantalla(int[][] mapa, int anchoMapa, int altoMapa, ArrayList<Textura> texturas, int ancho, int alto) {
+        this.setMapa(mapa);
+        this.setAnchoMapa(anchoMapa);
+        this.setAltoMapa(altoMapa);
+        this.setTexturas(texturas);
+        this.setAncho(ancho);
+        this.setAlto(alto);
     }
 
     void setMapa(int[][] MAPA) {
-        this.map=MAPA;
+        this.mapa=MAPA;
     }
 
     void setAnchoMapa(int ANCHOMAPA) {
-        this.mapWidth=ANCHOMAPA;
+        this.anchoMapa=ANCHOMAPA;
     }
 
     void setAltoMapa(int ALTOMAPA) {
-        this.mapHeight=ALTOMAPA;
+        this.altoMapa=ALTOMAPA;
     }
 
     void setTexturas(ArrayList<Textura> TEXTURAS) {
-        this.textures=TEXTURAS;
+        this.texturas=TEXTURAS;
     }
 
     void setAncho(int ANCHO) {
-        this.width=ANCHO;
+        this.ancho=ANCHO;
     }
 
     void setAlto(int ALTO) {
-        this.height=ALTO;
+        this.alto=ALTO;
     }
 
-    public int[] update(Camara camera, int[] pixels) {
-        for(int n=0; n<pixels.length/2; n++) {
-                if(pixels[n] != Color.DARK_GRAY.getRGB()) pixels[n] = Color.DARK_GRAY.getRGB();
+    public int[] actualiza(Camara camara, int[] pixeles) {
+        for(int n=0; n<pixeles.length/2; n++) {
+            if(pixeles[n] != Color.DARK_GRAY.getRGB()) {
+                pixeles[n] = Color.DARK_GRAY.getRGB();
+            }
         }
-        for(int i=pixels.length/2; i<pixels.length; i++){
-                if(pixels[i] != Color.gray.getRGB()) pixels[i] = Color.gray.getRGB();
+        for(int i=pixeles.length/2; i<pixeles.length; i++){
+            if(pixeles[i] != Color.gray.getRGB()) {
+                pixeles[i] = Color.gray.getRGB();
+            }
         }
 
-        for(int x=0; x<width; x=x+1) {
-            double cameraX = 2 * x / (double)(width) -1;
-            double rayDirX = camera.dirX + camera.planoX * cameraX;
-            double rayDirY = camera.dirY + camera.planoY * cameraX;
-            //Map position
-            int mapX = (int)camera.posX;
-            int mapY = (int)camera.posY;
-            //length of ray from current position to next x or y-side
-            double sideDistX;
-            double sideDistY;
-            //Length of ray from one side to next in map
-            double deltaDistX = Math.sqrt(1 + (rayDirY*rayDirY) / (rayDirX*rayDirX));
-            double deltaDistY = Math.sqrt(1 + (rayDirX*rayDirX) / (rayDirY*rayDirY));
+        for(int x=0; x<ancho; x+=1) {
+            double posXCam = 2 * x / (double)(ancho) -1; //????????????????????
+            double dirRayoX = camara.dirX + camara.planoX * posXCam;
+            double dirRayoY = camara.dirY + camara.planoY * posXCam;
+
+            //Posicion mapa
+            int posXMapa = (int)camara.posX;
+            int posYMapa = (int)camara.posY;
+            
+            //"longitud del rayo desde la posicion actual al siguiente lado x o y" 
+            double disLadoX;
+            double disLadoY;
+            
+            //"longitud del rayo desde un lado al siguiente del mapa"
+            double deltaDistX = Math.sqrt(1 + (dirRayoY*dirRayoY) / (dirRayoX*dirRayoX));
+            double deltaDistY = Math.sqrt(1 + (dirRayoX*dirRayoX) / (dirRayoY*dirRayoY));
             double perpWallDist;
-            //Direction to go in x and y
+            
+            //"direccion a la que ir de x e y"
             int stepX, stepY;
-            boolean hit = false;//was a wall hit
-            int side=0;//was the wall vertical or horizontal
-            //Figure out the step direction and initial distance to a side
-            if (rayDirX < 0)
-            {
+            boolean hit = false; //"fue una colision contra el muro"
+            int side=0; //"fue el muro vertical u horizontal"
+            
+            //"Figura la direccion paso y distancia inicial a un lado"
+            if (dirRayoX < 0) {
                 stepX = -1;
-                sideDistX = (camera.posX - mapX) * deltaDistX;
+                disLadoX = (camara.posX - posXMapa) * deltaDistX;
             }
-            else
-            {
+            else {
                 stepX = 1;
-                sideDistX = (mapX + 1.0 - camera.posX) * deltaDistX;
+                disLadoX = (posXMapa + 1.0 - camara.posX) * deltaDistX;
             }
-            if (rayDirY < 0)
-            {
+            if (dirRayoY < 0) {
                 stepY = -1;
-                sideDistY = (camera.posY - mapY) * deltaDistY;
+                disLadoY = (camara.posY - posYMapa) * deltaDistY;
             }
-            else
-            {
+            else {
                 stepY = 1;
-                sideDistY = (mapY + 1.0 - camera.posY) * deltaDistY;
+                disLadoY = (posYMapa + 1.0 - camara.posY) * deltaDistY;
             }
-            //Loop to find where the ray hits a wall
+            
+            //"Bucle para encontrar donde intersecta el rayo con el muro"
             while(!hit) {
-                //Jump to next square
-                if (sideDistX < sideDistY)
+                
+                //"Salta al siguiente cuadrado"
+                if (disLadoX < disLadoY)
                 {
-                        sideDistX += deltaDistX;
-                        mapX += stepX;
-                        side = 0;
+                    disLadoX += deltaDistX;
+                    posXMapa += stepX;
+                    side = 0;
                 }
                 else
                 {
-                        sideDistY += deltaDistY;
-                        mapY += stepY;
-                        side = 1;
+                    disLadoY += deltaDistY;
+                    posYMapa += stepY;
+                    side = 1;
                 }
                 //Check if ray has hit a wall
-                //System.out.println(mapX + ", " + mapY + ", " + map[mapX][mapY]);
-                if(map[mapX][mapY] > 0) hit = true;
+                //System.out.println(mapX + ", " + mapY + ", " + mapa[mapX][mapY]);
+                if(mapa[posXMapa][posYMapa] > 0) hit = true;
             }
             //Calculate distance to the point of impact
-            if(side==0)
-                perpWallDist = Math.abs((mapX - camera.posX + (1 - stepX) / 2) / rayDirX);
-            else
-                perpWallDist = Math.abs((mapY - camera.posY + (1 - stepY) / 2) / rayDirY);	
-            //Now calculate the height of the wall based on the distance from the camera
+            if(side==0) {
+                perpWallDist = Math.abs((posXMapa - camara.posX + (1 - stepX) / 2) / dirRayoX);
+            }
+            else {
+                perpWallDist = Math.abs((posYMapa - camara.posY + (1 - stepY) / 2) / dirRayoY);	
+            }
+
+            //Now calculate the alto of the wall based on the distance from the camera
             int lineHeight;
-            if(perpWallDist > 0) lineHeight = Math.abs((int)(height / perpWallDist));
-            else lineHeight = height;
+            if(perpWallDist > 0) lineHeight = Math.abs((int)(alto / perpWallDist));
+            else lineHeight = alto;
             //calculate lowest and highest pixel to fill in current stripe
-            int drawStart = -lineHeight/2+ height/2;
+            int drawStart = -lineHeight/2+ alto/2;
             if(drawStart < 0)
                 drawStart = 0;
-            int drawEnd = lineHeight/2 + height/2;
-            if(drawEnd >= height) 
-                drawEnd = height - 1;
+            int drawEnd = lineHeight/2 + alto/2;
+            if(drawEnd >= alto) 
+                drawEnd = alto - 1;
             //add a texture
-            int texNum = map[mapX][mapY] - 1;
+            int texNum = mapa[posXMapa][posYMapa] - 1;
             double wallX;//Exact position of where wall was hit
             if(side==1) {//If its a y-axis wall
-                wallX = (camera.posX + ((mapY - camera.posY + (1 - stepY) / 2) / rayDirY) * rayDirX);
+                wallX = (camara.posX + ((posYMapa - camara.posY + (1 - stepY) / 2) / dirRayoY) * dirRayoX);
             } else {//X-axis wall
-                wallX = (camera.posY + ((mapX - camera.posX + (1 - stepX) / 2) / rayDirX) * rayDirY);
+                wallX = (camara.posY + ((posXMapa - camara.posX + (1 - stepX) / 2) / dirRayoX) * dirRayoY);
             }
             wallX-=Math.floor(wallX);
             //x coordinate on the texture
-            int texX = (int)(wallX * (textures.get(texNum).tamañoTextura));
-            if(side == 0 && rayDirX > 0) texX = textures.get(texNum).tamañoTextura - texX - 1;
-            if(side == 1 && rayDirY < 0) texX = textures.get(texNum).tamañoTextura - texX - 1;
+            int texX = (int)(wallX * (texturas.get(texNum).tamañoTextura));
+            if(side == 0 && dirRayoX > 0) texX = texturas.get(texNum).tamañoTextura - texX - 1;
+            if(side == 1 && dirRayoY < 0) texX = texturas.get(texNum).tamañoTextura - texX - 1;
+            
             //calculate y coordinate on texture
             for(int y=drawStart; y<drawEnd; y++) {
-                int texY = (((y*2 - height + lineHeight) << 6) / lineHeight) / 2;
+                int texY = (((y*2 - alto + lineHeight) << 6) / lineHeight) / 2;
                 int color;
-                if(side==0) color = textures.get(texNum).pixeles[texX + (texY * textures.get(texNum).tamañoTextura)];
-                else color = (textures.get(texNum).pixeles[texX + (texY * textures.get(texNum).tamañoTextura)]>>1) & 8355711;//Make y sides darker
-                pixels[x + y*(width)] = color;
+                if(side==0) color = texturas.get(texNum).pixeles[texX + (texY * texturas.get(texNum).tamañoTextura)];
+                else color = (texturas.get(texNum).pixeles[texX + (texY * texturas.get(texNum).tamañoTextura)]>>1) & 8355711;//Make y sides darker
+                pixeles[x + y*(ancho)] = color;
             }
         }
-        return pixels;
+        return pixeles;
     }
 }
