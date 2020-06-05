@@ -85,6 +85,15 @@ public class Camara implements KeyListener{
     }
     
     public void actualiza(int[][] mapa) {
+        System.out.println("\n******************"+
+                           "\n*posX:"+posX+
+                           "\n*posY: "+posY+
+                           "\n*dirX: "+dirX+
+                           "\n*dirY: "+dirY+
+                           "\n*planoX: "+planoX+
+                           "\n*planoY: "+planoY+
+                           "\n******************");
+        
         if(delante) { //suma
             if(mapa[(int)(posX + dirX * VELMOVIMIENTO)][(int)posY] == 0) {
                     posX+=dirX*VELMOVIMIENTO;

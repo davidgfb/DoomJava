@@ -28,7 +28,7 @@ public class Juego extends JFrame implements Runnable{
            dirY=0, 
            planoX=0, 
            planoY=-0.66;
-    public Camara camera= new Camara(posX, posY, dirX, dirY, planoX, planoY);
+    public Camara camara= new Camara(posX, posY, dirX, dirY, planoX, planoY);
     public Pantalla screen = new Pantalla(mapa, anchoMapa, altoMapa, texturas, anchoVen, altoVen);
     public static int[][] mapa = {{1,1,1,1,1,1,1,1,2,2,2,2,2,2,2},
                                  {1,0,0,0,0,0,0,0,2,0,0,0,0,0,2},
@@ -48,17 +48,17 @@ public class Juego extends JFrame implements Runnable{
     
     public Juego() {
             
-        //************************  AÑADE TEXTURAS  ***********************
+        //************************  AÑADE TEXTURAS  *********************** //al arraylist
         this.texturas.add(Textura.madera);
         this.texturas.add(Textura.ladrillo);
         this.texturas.add(Textura.piedraAzul);
         this.texturas.add(Textura.piedra);
         //************************  FIN AÑADE TEXTURAS  *******************
 
-        this.addKeyListener(camera);
+        this.addKeyListener(camara);
         this.setSize(anchoVen, altoVen);
         this.setResizable(false);
-        this.setTitle("3D Engine");
+        this.setTitle("Doom Java");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setBackground(Color.black);
         this.setLocationRelativeTo(null);
@@ -118,8 +118,8 @@ public class Juego extends JFrame implements Runnable{
             
             while (delta >= 1) //Make sure actualiza is only happening 60 times a second
             {
-                this.screen.update(camera, pixeles); //handles all of the logic restricted time
-                this.camera.actualiza(mapa);
+                this.screen.update(camara, pixeles); //handles all of the logic restricted time
+                this.camara.actualiza(mapa);
                 delta--;
             }
             this.renderiza();//displays to the screen unrestricted time
