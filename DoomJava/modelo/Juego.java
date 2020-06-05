@@ -58,47 +58,50 @@ public class Juego extends JFrame implements Runnable{
         this.running = true;
         this.thread.start();
     }
-    private synchronized void start() {
-            
+    
+    public synchronized void para() {
+        running = false;
+        try {
+                thread.join();
+        } catch(InterruptedException e) {
+                e.printStackTrace();
+        }
     }
-    public synchronized void stop() {
-            running = false;
-            try {
-                    thread.join();
-            } catch(InterruptedException e) {
-                    e.printStackTrace();
-            }
+    
+    public void renderiza() {
+        BufferStrategy bs = getBufferStrategy();
+        if(bs == null) {
+                createBufferStrategy(3);
+                return;
+        }
+        Graphics g = bs.getDrawGraphics();
+        g.drawImage(image, 0, 0, image.getWidth(), image.getHeight(), null);
+        bs.show();
     }
-    public void render() {
-            BufferStrategy bs = getBufferStrategy();
-            if(bs == null) {
-                    createBufferStrategy(3);
-                    return;
-            }
-            Graphics g = bs.getDrawGraphics();
-            g.drawImage(image, 0, 0, image.getWidth(), image.getHeight(), null);
-            bs.show();
-    }
+    
+    @Override
     public void run() {
         long lastTime = System.nanoTime();
         final double ns = 1000000000.0 / 60.0; //60 times per second
         double delta = 0;
-        requestFocus();
+        this.requestFocus();
         while(running) {
             long now = System.nanoTime();
-            delta = delta + ((now-lastTime) / ns);
+            delta += (now-lastTime) / ns;
             lastTime = now;
-            while (delta >= 1)//Make sure update is only happening 60 times a second
+            
+            while (delta >= 1) //Make sure update is only happening 60 times a second
             {
                 //handles all of the logic restricted time
-                screen.update(camera, pixels);
-                camera.update(map);
+                this.screen.update(camera, pixels);
+                this.camera.update(map);
                 delta--;
             }
-            render();//displays to the screen unrestricted time
+            this.renderiza();//displays to the screen unrestricted time
         }
     }
+    
     public static void main(String [] args) {
-            Juego game = new Juego();
+        Juego juego = new Juego();
     }
 }
