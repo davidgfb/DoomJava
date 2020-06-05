@@ -1,4 +1,4 @@
-package modelo;
+package controlador;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -8,14 +8,17 @@ import java.awt.image.DataBufferInt;
 import java.awt.image.ImageObserver;
 import java.util.ArrayList;
 import javax.swing.JFrame;
+import modelo.Camara;
+import vista.Pantalla;
+import modelo.Textura;
 
 public class Juego extends JFrame implements Runnable{
 	
     public int anchoMapa = 15,
                altoMapa = 15,
-            
-               anchoVen=640,
-               altoVen=480;
+               
+               anchoVen=1920,
+               altoVen=1080;
     
     private final Thread hilo=new Thread(this);
     private boolean abierto=true;
@@ -28,8 +31,8 @@ public class Juego extends JFrame implements Runnable{
            dirY=0, 
            planoX=0, 
            planoY=-0.66;
-    public Camara camara= new Camara(posX, posY, dirX, dirY, planoX, planoY);
-    public Pantalla screen = new Pantalla(mapa, anchoMapa, altoMapa, texturas, anchoVen, altoVen);
+    public Camara camara= new Camara(posX, posY, dirX, dirY, planoX, planoY); //crea clase Camara
+    public Pantalla screen = new Pantalla(mapa, anchoMapa, altoMapa, texturas, anchoVen, altoVen); //crea clase Pantalla
     public static int[][] mapa = {{1,1,1,1,1,1,1,1,2,2,2,2,2,2,2},
                                  {1,0,0,0,0,0,0,0,2,0,0,0,0,0,2},
                                  {1,0,3,3,3,3,3,0,0,0,0,0,0,0,2},
@@ -46,13 +49,19 @@ public class Juego extends JFrame implements Runnable{
                                  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,4},
                                  {1,1,1,1,1,1,1,4,4,4,4,4,4,4,4}};
     
+    //***************************** INICIO TEXTURAS **************************************** //instanciacion!
+        public static Textura madera = new Textura("/texturas/madera.png", 64),
+                              ladrillo = new Textura("/texturas/ladrilloRojo.png", 64),
+                              piedraAzul = new Textura("/texturas/piedraAzul.png", 64),
+                              piedra = new Textura("/texturas/piedraGris.png", 64);
+    //****************************  FIN TEXTURAS    ****************************************
+    
     public Juego() {
-            
         //************************  AÑADE TEXTURAS  *********************** //al arraylist
-        this.texturas.add(Textura.madera);
-        this.texturas.add(Textura.ladrillo);
-        this.texturas.add(Textura.piedraAzul);
-        this.texturas.add(Textura.piedra);
+        this.texturas.add(madera);
+        this.texturas.add(ladrillo);
+        this.texturas.add(piedraAzul);
+        this.texturas.add(piedra);
         //************************  FIN AÑADE TEXTURAS  *******************
 
         this.addKeyListener(camara);

@@ -1,14 +1,16 @@
-package modelo;
+package vista;
 
 import java.util.ArrayList;
 import java.awt.Color;
+import modelo.Camara;
+import modelo.Textura;
 
 public class Pantalla {
     public int[][] mapa;
-    public int anchoMapa, 
-               altoMapa, 
-               ancho, 
-               alto;
+    public int anchoMapa=0, 
+               altoMapa=0, 
+               ancho=0, 
+               alto=0;
 
     public ArrayList<Textura> texturas;
 

@@ -11,13 +11,6 @@ public class Textura {
     private String ruta;
     public int tamañoTextura = 64; 
     
-    //***************************** INICIO TEXTURAS **************************************** //instanciacion!
-    public static Textura madera = new Textura("/texturas/madera.png", 64),
-                          ladrillo = new Textura("/texturas/ladrilloRojo.png", 64),
-                          piedraAzul = new Textura("/texturas/piedraAzul.png", 64),
-                          piedra = new Textura("/texturas/piedraGris.png", 64);
-    //****************************  FIN TEXTURAS    ****************************************
-
     public Textura(String ruta, int tamaño) {
         this.setRuta(ruta);
         this.setTamañoTextura(tamaño);
