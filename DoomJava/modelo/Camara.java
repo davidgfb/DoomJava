@@ -3,30 +3,29 @@ package modelo;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-
 public class Camara implements KeyListener{
-    public double xPos, 
-                  yPos, 
-                  xDir, 
-                  yDir, 
-                  xPlane, 
-                  yPlane;
+    public double xPos=0, 
+                  yPos=0, 
+                  xDir=0, 
+                  yDir=0, 
+                  xPlane=0, 
+                  yPlane=0;
 
-    public boolean left, 
-                   right, 
-                   forward, 
-                   back;
+    public boolean izquierda=false, 
+                   derecha=false, 
+                   delante=false, 
+                   atras=false;
 
-    public final double MOVE_SPEED = 0.08;
-    public final double ROTATION_SPEED = 0.045;
+    public final double VELMOVIMIENTO = 0.08,
+                        VELROTACION = 0.045;
 
-    public Camara(double x, double y, double xd, double yd, double xp, double yp) {
-        this.setPosX(x);
-        this.setPosY(y);
-        this.setDirX(xd);
-        this.setDirY(yd);
-        this.setPlanoX(xp);
-        this.setPlanoY(yp);
+    public Camara(double posX, double posY, double dirX, double dirY, double planoX, double planoY) {
+        this.setPosX(posX);
+        this.setPosY(posY);
+        this.setDirX(dirX);
+        this.setDirY(dirY);
+        this.setPlanoX(planoX);
+        this.setPlanoY(planoY);
     }
 
     void setPosX(double POSX) {
@@ -55,57 +54,65 @@ public class Camara implements KeyListener{
     
     @Override
     public void keyPressed(KeyEvent key) {
-        if((key.getKeyCode() == KeyEvent.VK_W))
-            forward = true;
-        if((key.getKeyCode() == KeyEvent.VK_A))
-            left = true;
-        if((key.getKeyCode() == KeyEvent.VK_S))
-            back = true;
-        if((key.getKeyCode() == KeyEvent.VK_D))
-            right = true;
+        if((key.getKeyCode() == KeyEvent.VK_W)) {
+            delante = true;
+        }
+        if((key.getKeyCode() == KeyEvent.VK_A)) {
+            izquierda = true;
+        }
+        if((key.getKeyCode() == KeyEvent.VK_S)) {
+            atras = true;
+        }
+        if((key.getKeyCode() == KeyEvent.VK_D)) {
+            derecha = true;
+        }
     }
         
     @Override
     public void keyReleased(KeyEvent key) {
-        if((key.getKeyCode() == KeyEvent.VK_W))
-            forward = false;
-        if((key.getKeyCode() == KeyEvent.VK_A))
-            left = false;
-        if((key.getKeyCode() == KeyEvent.VK_S))
-            back = false;
-        if((key.getKeyCode() == KeyEvent.VK_D))
-            right = false;
+        if((key.getKeyCode() == KeyEvent.VK_W)) {
+            delante = false;
+        }
+        if((key.getKeyCode() == KeyEvent.VK_A)) {
+            izquierda = false;
+        }
+        if((key.getKeyCode() == KeyEvent.VK_S)) {
+            atras = false;
+        }
+        if((key.getKeyCode() == KeyEvent.VK_D)) {
+            derecha = false;
+        }
     }
     
     public void update(int[][] map) {
-        if(forward) {
-                if(map[(int)(xPos + xDir * MOVE_SPEED)][(int)yPos] == 0) {
-                        xPos+=xDir*MOVE_SPEED;
+        if(delante) {
+                if(map[(int)(xPos + xDir * VELMOVIMIENTO)][(int)yPos] == 0) {
+                        xPos+=xDir*VELMOVIMIENTO;
                 }
-                if(map[(int)xPos][(int)(yPos + yDir * MOVE_SPEED)] ==0)
-                        yPos+=yDir*MOVE_SPEED;
+                if(map[(int)xPos][(int)(yPos + yDir * VELMOVIMIENTO)] ==0)
+                        yPos+=yDir*VELMOVIMIENTO;
         }
-        if(back) {
-                if(map[(int)(xPos - xDir * MOVE_SPEED)][(int)yPos] == 0)
-                        xPos-=xDir*MOVE_SPEED;
-                if(map[(int)xPos][(int)(yPos - yDir * MOVE_SPEED)]==0)
-                        yPos-=yDir*MOVE_SPEED;
+        if(atras) {
+                if(map[(int)(xPos - xDir * VELMOVIMIENTO)][(int)yPos] == 0)
+                        xPos-=xDir*VELMOVIMIENTO;
+                if(map[(int)xPos][(int)(yPos - yDir * VELMOVIMIENTO)]==0)
+                        yPos-=yDir*VELMOVIMIENTO;
         }
-        if(right) {
+        if(derecha) {
                 double oldxDir=xDir;
-                xDir=xDir*Math.cos(-ROTATION_SPEED) - yDir*Math.sin(-ROTATION_SPEED);
-                yDir=oldxDir*Math.sin(-ROTATION_SPEED) + yDir*Math.cos(-ROTATION_SPEED);
+                xDir=xDir*Math.cos(-VELROTACION) - yDir*Math.sin(-VELROTACION);
+                yDir=oldxDir*Math.sin(-VELROTACION) + yDir*Math.cos(-VELROTACION);
                 double oldxPlane = xPlane;
-                xPlane=xPlane*Math.cos(-ROTATION_SPEED) - yPlane*Math.sin(-ROTATION_SPEED);
-                yPlane=oldxPlane*Math.sin(-ROTATION_SPEED) + yPlane*Math.cos(-ROTATION_SPEED);
+                xPlane=xPlane*Math.cos(-VELROTACION) - yPlane*Math.sin(-VELROTACION);
+                yPlane=oldxPlane*Math.sin(-VELROTACION) + yPlane*Math.cos(-VELROTACION);
         }
-        if(left) {
+        if(izquierda) {
                 double oldxDir=xDir;
-                xDir=xDir*Math.cos(ROTATION_SPEED) - yDir*Math.sin(ROTATION_SPEED);
-                yDir=oldxDir*Math.sin(ROTATION_SPEED) + yDir*Math.cos(ROTATION_SPEED);
+                xDir=xDir*Math.cos(VELROTACION) - yDir*Math.sin(VELROTACION);
+                yDir=oldxDir*Math.sin(VELROTACION) + yDir*Math.cos(VELROTACION);
                 double oldxPlane = xPlane;
-                xPlane=xPlane*Math.cos(ROTATION_SPEED) - yPlane*Math.sin(ROTATION_SPEED);
-                yPlane=oldxPlane*Math.sin(ROTATION_SPEED) + yPlane*Math.cos(ROTATION_SPEED);
+                xPlane=xPlane*Math.cos(VELROTACION) - yPlane*Math.sin(VELROTACION);
+                yPlane=oldxPlane*Math.sin(VELROTACION) + yPlane*Math.cos(VELROTACION);
         }
     }
     public void keyTyped(KeyEvent arg0) {

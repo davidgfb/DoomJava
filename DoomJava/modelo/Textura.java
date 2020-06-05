@@ -56,7 +56,9 @@ public class Textura {
                 desplaz=0;
             
             imagen.getRGB(x0, y0, ancho, alto, pixeles, desplaz, ancho);
-        } catch (IOException ex) {
+        } 
+        
+        catch (IOException ex) {
             Logger.getLogger(Textura.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
