@@ -137,15 +137,15 @@ public class Pantalla {
             }
             wallX-=Math.floor(wallX);
             //x coordinate on the texture
-            int texX = (int)(wallX * (textures.get(texNum).SIZE));
-            if(side == 0 && rayDirX > 0) texX = textures.get(texNum).SIZE - texX - 1;
-            if(side == 1 && rayDirY < 0) texX = textures.get(texNum).SIZE - texX - 1;
+            int texX = (int)(wallX * (textures.get(texNum).tamañoTextura));
+            if(side == 0 && rayDirX > 0) texX = textures.get(texNum).tamañoTextura - texX - 1;
+            if(side == 1 && rayDirY < 0) texX = textures.get(texNum).tamañoTextura - texX - 1;
             //calculate y coordinate on texture
             for(int y=drawStart; y<drawEnd; y++) {
                 int texY = (((y*2 - height + lineHeight) << 6) / lineHeight) / 2;
                 int color;
-                if(side==0) color = textures.get(texNum).pixels[texX + (texY * textures.get(texNum).SIZE)];
-                else color = (textures.get(texNum).pixels[texX + (texY * textures.get(texNum).SIZE)]>>1) & 8355711;//Make y sides darker
+                if(side==0) color = textures.get(texNum).pixeles[texX + (texY * textures.get(texNum).tamañoTextura)];
+                else color = (textures.get(texNum).pixeles[texX + (texY * textures.get(texNum).tamañoTextura)]>>1) & 8355711;//Make y sides darker
                 pixels[x + y*(width)] = color;
             }
         }

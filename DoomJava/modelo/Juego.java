@@ -49,10 +49,10 @@ public class Juego extends JFrame implements Runnable{
     public Juego() {
             
         //************************  AÑADE TEXTURAS  ***********************
-        this.texturas.add(Textura.wood);
-        this.texturas.add(Textura.brick);
-        this.texturas.add(Textura.bluestone);
-        this.texturas.add(Textura.stone);
+        this.texturas.add(Textura.madera);
+        this.texturas.add(Textura.ladrillo);
+        this.texturas.add(Textura.piedraAzul);
+        this.texturas.add(Textura.piedra);
         //************************  FIN AÑADE TEXTURAS  *******************
 
         this.addKeyListener(camera);
