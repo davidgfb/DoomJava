@@ -52,29 +52,29 @@ public class Camara implements KeyListener{
     void setPlanoY(double PLANOY) {
         this.yPlane=PLANOY;
     }
-
-    @Override
-    public void keyPressed(KeyEvent key) {
-        if((key.getKeyCode() == KeyEvent.VK_LEFT))
-                left = true;
-        if((key.getKeyCode() == KeyEvent.VK_RIGHT))
-                right = true;
-        if((key.getKeyCode() == KeyEvent.VK_UP))
-                forward = true;
-        if((key.getKeyCode() == KeyEvent.VK_DOWN))
-                back = true;
-    }
     
     @Override
+    public void keyPressed(KeyEvent key) {
+        if((key.getKeyCode() == KeyEvent.VK_W))
+            forward = true;
+        if((key.getKeyCode() == KeyEvent.VK_A))
+            left = true;
+        if((key.getKeyCode() == KeyEvent.VK_S))
+            back = true;
+        if((key.getKeyCode() == KeyEvent.VK_D))
+            right = true;
+    }
+        
+    @Override
     public void keyReleased(KeyEvent key) {
-        if((key.getKeyCode() == KeyEvent.VK_LEFT))
-                left = false;
-        if((key.getKeyCode() == KeyEvent.VK_RIGHT))
-                right = false;
-        if((key.getKeyCode() == KeyEvent.VK_UP))
-                forward = false;
-        if((key.getKeyCode() == KeyEvent.VK_DOWN))
-                back = false;
+        if((key.getKeyCode() == KeyEvent.VK_W))
+            forward = false;
+        if((key.getKeyCode() == KeyEvent.VK_A))
+            left = false;
+        if((key.getKeyCode() == KeyEvent.VK_S))
+            back = false;
+        if((key.getKeyCode() == KeyEvent.VK_D))
+            right = false;
     }
     
     public void update(int[][] map) {
