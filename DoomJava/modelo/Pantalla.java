@@ -55,11 +55,11 @@ public class Pantalla {
 
         for(int x=0; x<width; x=x+1) {
             double cameraX = 2 * x / (double)(width) -1;
-            double rayDirX = camera.xDir + camera.xPlane * cameraX;
-            double rayDirY = camera.yDir + camera.yPlane * cameraX;
+            double rayDirX = camera.dirX + camera.planoX * cameraX;
+            double rayDirY = camera.dirY + camera.planoY * cameraX;
             //Map position
-            int mapX = (int)camera.xPos;
-            int mapY = (int)camera.yPos;
+            int mapX = (int)camera.posX;
+            int mapY = (int)camera.posY;
             //length of ray from current position to next x or y-side
             double sideDistX;
             double sideDistY;
@@ -75,22 +75,22 @@ public class Pantalla {
             if (rayDirX < 0)
             {
                 stepX = -1;
-                sideDistX = (camera.xPos - mapX) * deltaDistX;
+                sideDistX = (camera.posX - mapX) * deltaDistX;
             }
             else
             {
                 stepX = 1;
-                sideDistX = (mapX + 1.0 - camera.xPos) * deltaDistX;
+                sideDistX = (mapX + 1.0 - camera.posX) * deltaDistX;
             }
             if (rayDirY < 0)
             {
                 stepY = -1;
-                sideDistY = (camera.yPos - mapY) * deltaDistY;
+                sideDistY = (camera.posY - mapY) * deltaDistY;
             }
             else
             {
                 stepY = 1;
-                sideDistY = (mapY + 1.0 - camera.yPos) * deltaDistY;
+                sideDistY = (mapY + 1.0 - camera.posY) * deltaDistY;
             }
             //Loop to find where the ray hits a wall
             while(!hit) {
@@ -113,9 +113,9 @@ public class Pantalla {
             }
             //Calculate distance to the point of impact
             if(side==0)
-                perpWallDist = Math.abs((mapX - camera.xPos + (1 - stepX) / 2) / rayDirX);
+                perpWallDist = Math.abs((mapX - camera.posX + (1 - stepX) / 2) / rayDirX);
             else
-                perpWallDist = Math.abs((mapY - camera.yPos + (1 - stepY) / 2) / rayDirY);	
+                perpWallDist = Math.abs((mapY - camera.posY + (1 - stepY) / 2) / rayDirY);	
             //Now calculate the height of the wall based on the distance from the camera
             int lineHeight;
             if(perpWallDist > 0) lineHeight = Math.abs((int)(height / perpWallDist));
@@ -131,9 +131,9 @@ public class Pantalla {
             int texNum = map[mapX][mapY] - 1;
             double wallX;//Exact position of where wall was hit
             if(side==1) {//If its a y-axis wall
-                wallX = (camera.xPos + ((mapY - camera.yPos + (1 - stepY) / 2) / rayDirY) * rayDirX);
+                wallX = (camera.posX + ((mapY - camera.posY + (1 - stepY) / 2) / rayDirY) * rayDirX);
             } else {//X-axis wall
-                wallX = (camera.yPos + ((mapX - camera.xPos + (1 - stepX) / 2) / rayDirX) * rayDirY);
+                wallX = (camera.posY + ((mapX - camera.posX + (1 - stepX) / 2) / rayDirX) * rayDirY);
             }
             wallX-=Math.floor(wallX);
             //x coordinate on the texture

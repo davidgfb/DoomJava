@@ -116,10 +116,10 @@ public class Juego extends JFrame implements Runnable{
             delta += (ahora-ultimoTiempo) / ns;
             ultimoTiempo = ahora;
             
-            while (delta >= 1) //Make sure update is only happening 60 times a second
+            while (delta >= 1) //Make sure actualiza is only happening 60 times a second
             {
                 this.screen.update(camera, pixeles); //handles all of the logic restricted time
-                this.camera.update(mapa);
+                this.camera.actualiza(mapa);
                 delta--;
             }
             this.renderiza();//displays to the screen unrestricted time

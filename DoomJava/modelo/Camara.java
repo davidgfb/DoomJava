@@ -4,12 +4,12 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class Camara implements KeyListener{
-    public double xPos=0, 
-                  yPos=0, 
-                  xDir=0, 
-                  yDir=0, 
-                  xPlane=0, 
-                  yPlane=0;
+    public double posX=0, 
+                  posY=0, 
+                  dirX=0, 
+                  dirY=0, 
+                  planoX=0, 
+                  planoY=0;
 
     public boolean izquierda=false, 
                    derecha=false, 
@@ -29,27 +29,27 @@ public class Camara implements KeyListener{
     }
 
     void setPosX(double POSX) {
-        this.xPos=POSX;
+        this.posX=POSX;
     }
 
     void setPosY(double POSY) {
-        this.yPos=POSY;
+        this.posY=POSY;
     }
 
     void setDirX(double DIRX) {
-        this.xDir=DIRX;
+        this.dirX=DIRX;
     }
 
     void setDirY(double DIRY) {
-        this.yDir=DIRY;
+        this.dirY=DIRY;
     }
 
     void setPlanoX(double PLANOX) {
-        this.xPlane=PLANOX;
+        this.planoX=PLANOX;
     }
 
     void setPlanoY(double PLANOY) {
-        this.yPlane=PLANOY;
+        this.planoY=PLANOY;
     }
     
     @Override
@@ -84,39 +84,45 @@ public class Camara implements KeyListener{
         }
     }
     
-    public void update(int[][] map) {
-        if(delante) {
-                if(map[(int)(xPos + xDir * VELMOVIMIENTO)][(int)yPos] == 0) {
-                        xPos+=xDir*VELMOVIMIENTO;
-                }
-                if(map[(int)xPos][(int)(yPos + yDir * VELMOVIMIENTO)] ==0)
-                        yPos+=yDir*VELMOVIMIENTO;
+    public void actualiza(int[][] mapa) {
+        if(delante) { //suma
+            if(mapa[(int)(posX + dirX * VELMOVIMIENTO)][(int)posY] == 0) {
+                    posX+=dirX*VELMOVIMIENTO;
+            }
+            if(mapa[(int)posX][(int)(posY + dirY * VELMOVIMIENTO)] ==0)
+                    posY+=dirY*VELMOVIMIENTO;
         }
-        if(atras) {
-                if(map[(int)(xPos - xDir * VELMOVIMIENTO)][(int)yPos] == 0)
-                        xPos-=xDir*VELMOVIMIENTO;
-                if(map[(int)xPos][(int)(yPos - yDir * VELMOVIMIENTO)]==0)
-                        yPos-=yDir*VELMOVIMIENTO;
+        if(atras) { //resta
+            if(mapa[(int)(posX - dirX * VELMOVIMIENTO)][(int)posY] == 0)
+                    posX-=dirX*VELMOVIMIENTO;
+            if(mapa[(int)posX][(int)(posY - dirY * VELMOVIMIENTO)]==0)
+                    posY-=dirY*VELMOVIMIENTO;
         }
         if(derecha) {
-                double oldxDir=xDir;
-                xDir=xDir*Math.cos(-VELROTACION) - yDir*Math.sin(-VELROTACION);
-                yDir=oldxDir*Math.sin(-VELROTACION) + yDir*Math.cos(-VELROTACION);
-                double oldxPlane = xPlane;
-                xPlane=xPlane*Math.cos(-VELROTACION) - yPlane*Math.sin(-VELROTACION);
-                yPlane=oldxPlane*Math.sin(-VELROTACION) + yPlane*Math.cos(-VELROTACION);
+            double antDirX=dirX,
+                   antPlanoX = planoX;
+            
+            dirX=dirX*Math.cos(-VELROTACION) - dirY*Math.sin(-VELROTACION); //no simplifiques
+            dirY=antDirX*Math.sin(-VELROTACION) + dirY*Math.cos(-VELROTACION);
+            
+            planoX=planoX*Math.cos(-VELROTACION) - planoY*Math.sin(-VELROTACION);
+            planoY=antPlanoX*Math.sin(-VELROTACION) + planoY*Math.cos(-VELROTACION);
         }
         if(izquierda) {
-                double oldxDir=xDir;
-                xDir=xDir*Math.cos(VELROTACION) - yDir*Math.sin(VELROTACION);
-                yDir=oldxDir*Math.sin(VELROTACION) + yDir*Math.cos(VELROTACION);
-                double oldxPlane = xPlane;
-                xPlane=xPlane*Math.cos(VELROTACION) - yPlane*Math.sin(VELROTACION);
-                yPlane=oldxPlane*Math.sin(VELROTACION) + yPlane*Math.cos(VELROTACION);
+            double antDirX=dirX,
+                   antPlanoX = planoX;
+            
+            dirX=dirX*Math.cos(VELROTACION) - dirY*Math.sin(VELROTACION);
+            dirY=antDirX*Math.sin(VELROTACION) + dirY*Math.cos(VELROTACION);
+            
+            planoX=planoX*Math.cos(VELROTACION) - planoY*Math.sin(VELROTACION);
+            planoY=antPlanoX*Math.sin(VELROTACION) + planoY*Math.cos(VELROTACION);
         }
     }
+    
+    @Override
     public void keyTyped(KeyEvent arg0) {
-        // TODO Auto-generated method stub
+        // TODO Auto-generated method stub  metodo abstracto obligatorio
 
     }
 }
