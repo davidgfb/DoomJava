@@ -13,13 +13,13 @@ public class Juego extends JFrame implements Runnable{
     private static final long serialVersionUID = 1L;
     public int mapWidth = 15,
                mapHeight = 15;
-    private Thread thread;
+    private Thread thread=new Thread(this);
     private boolean running;
-    private BufferedImage image;
-    public int[] pixels;
-    public ArrayList<Textura> textures;
-    public Camara camera;
-    public Pantalla screen;
+    private BufferedImage image= new BufferedImage(640, 480, BufferedImage.TYPE_INT_RGB);;
+    public int[] pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();;
+    public ArrayList<Textura> textures = new ArrayList<Textura>();
+    public Camara camera= new Camara(4.5, 4.5, 1, 0, 0, -0.66);
+    public Pantalla screen = new Pantalla(map, mapWidth, mapHeight, textures, 640, 480);;
     public static int[][] map = {{1,1,1,1,1,1,1,1,2,2,2,2,2,2,2},
                                  {1,0,0,0,0,0,0,0,2,0,0,0,0,0,2},
                                  {1,0,3,3,3,3,3,0,0,0,0,0,0,0,2},
@@ -37,29 +37,29 @@ public class Juego extends JFrame implements Runnable{
                                  {1,1,1,1,1,1,1,4,4,4,4,4,4,4,4}};
     
     public Juego() {
-            thread = new Thread(this);
-            image = new BufferedImage(640, 480, BufferedImage.TYPE_INT_RGB);
-            pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
-            textures = new ArrayList<Textura>();
-            textures.add(Textura.wood);
-            textures.add(Textura.brick);
-            textures.add(Textura.bluestone);
-            textures.add(Textura.stone);
-            camera = new Camara(4.5, 4.5, 1, 0, 0, -.66);
-            screen = new Pantalla(map, mapWidth, mapHeight, textures, 640, 480);
-            addKeyListener(camera);
-            setSize(640, 480);
-            setResizable(false);
-            setTitle("3D Engine");
-            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            setBackground(Color.black);
-            setLocationRelativeTo(null);
-            setVisible(true);
-            start();
+            
+        //************************  AÑADE TEXTURAS  ***********************
+        this.textures.add(Textura.wood);
+        this.textures.add(Textura.brick);
+        this.textures.add(Textura.bluestone);
+        this.textures.add(Textura.stone);
+        //************************  FIN AÑADE TEXTURAS  *******************
+
+        
+        this.addKeyListener(camera);
+        this.setSize(640, 480);
+        this.setResizable(false);
+        this.setTitle("3D Engine");
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setBackground(Color.black);
+        this.setLocationRelativeTo(null);
+        this.setVisible(true);
+        
+        this.running = true;
+        this.thread.start();
     }
     private synchronized void start() {
-            running = true;
-            thread.start();
+            
     }
     public synchronized void stop() {
             running = false;
