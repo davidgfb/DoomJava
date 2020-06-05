@@ -16,12 +16,12 @@ public class Textura {
 
     public Textura(String location, int size) {
         //this.setRuta(loc);
-        loc=location;
-        SIZE=size;
+        this.loc=location;
+        this.SIZE=size;
         //this.setTamaño(size);
-        pixels=new int[SIZE * SIZE];
+        this.pixels=new int[SIZE * SIZE];
         //this.setPixeles(new int[SIZE * SIZE]);
-        load();
+        this.carga();
     }
     
     /*
@@ -40,14 +40,14 @@ public class Textura {
     }
     */
     
-    private void load() {
+    private void carga() {
         try {
-            BufferedImage image = ImageIO.read(getClass().getResource(loc));
-            int w = image.getWidth();
-            int h = image.getHeight();
-            image.getRGB(0, 0, w, h, pixels, 0, w);
-        } catch (IOException e) {
-            e.printStackTrace();
+            BufferedImage imagen = ImageIO.read(getClass().getResource(loc));
+            int ancho = imagen.getWidth(),
+                alto = imagen.getHeight();
+            imagen.getRGB(0, 0, ancho, alto, pixels, 0, ancho);
+        } catch (IOException error) {
+            error.printStackTrace();
         }
     }
 }
